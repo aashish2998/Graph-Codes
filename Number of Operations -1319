@@ -1,0 +1,44 @@
+class Solution {
+public:
+    
+    void dfs( int s, vector<int>g[],vector<int>&visited )
+    {
+        visited[s]=1;
+        for(auto x:g[s])
+        {
+            if(!visited[x])
+            {
+                dfs(x,g,visited);
+            }
+        }
+  
+        
+    }
+    int makeConnected(int n, vector<vector<int>>& connections) {
+        vector<int>g[n];
+        
+        int m = connections.size();
+        if(m<n-1)
+            return -1;
+        
+        for(int i=0;i<m;i++)
+        {
+            g[connections[i][0]].push_back(connections[i][1]);
+            g[connections[i][1]].push_back(connections[i][0]);
+        }
+        
+        vector<int>visited(n,0);
+        int cnt =0;
+        
+    for( int i=0;i<n;i++)
+    {
+        if(!visited[i])
+        {
+            cnt++;
+            dfs(i,g,visited);
+        }
+    }
+        
+        return cnt-1;
+    }
+};
