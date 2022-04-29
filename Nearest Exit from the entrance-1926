@@ -1,0 +1,77 @@
+class Solution {
+public:
+    
+    bool in_maze(int x , int y, int m , int n)
+    {
+        if(x>=0 && y>=0 && x<m && y<n)
+        {
+            return true;
+        }
+        return false;
+    }
+    
+     bool in_exit(int x , int y, int m , int n)
+    {
+        if(x==0 || y==0 ||x==m-1 || y==n-1)
+        {
+            return true;
+        }
+        return false;
+    }
+    
+    int bfs(vector<vector<char>>& maze, vector<int>& entrance)
+    {
+        int m = maze.size();
+        int n= maze[0].size();
+        
+        vector<vector<int>>distance(m,vector<int>(n,-1));
+        
+        vector<int>u ={ 0,0,-1,1};
+        vector<int>v ={-1,1,0,0};
+        
+        queue<pair<int,int>>q;
+        int x =entrance[0];
+        int y = entrance[1];
+        q.push({x,y});
+        
+        distance[x][y]=0;
+        
+        while(!q.empty())
+        {
+            auto temp =q.front();
+            q.pop();
+            
+            int r = temp.first;
+            int c =temp.second;
+            
+            if(distance[r][c]!=0)
+            {
+                if(in_exit(r,c,m,n))
+                {
+                    return distance[r][c];
+                    
+                }
+            }
+            for(auto k=0 ;k<u.size();k++)
+            {
+                int temp_x = r +u[k];
+                int temp_y = c + v[k];
+                if(in_maze(temp_x,temp_y,m,n) && maze[temp_x][temp_y]=='.' && distance[temp_x][temp_y]==-1)
+                {
+                    q.push({temp_x,temp_y});
+                    distance[temp_x][temp_y]= distance[r][c]+1;
+                    
+                }
+                
+            }
+        }
+        return -1;
+        
+    }
+    int nearestExit(vector<vector<char>>& maze, vector<int>& entrance) {
+        
+        
+        return bfs(maze,entrance);
+        
+    }
+};
