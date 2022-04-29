@@ -1,0 +1,53 @@
+class Solution {
+public:
+    
+    bool dfs(int src, vector<vector<int>>& graph,vector<bool>&visited,vector<bool>&Dfsvis,vector<bool>&precycle)
+    {
+        visited[src]=true;
+        Dfsvis[src] =true;
+        
+        for(auto x : graph[src])
+        {
+            if(!visited[x])
+            {
+               if( dfs(x,graph,visited,Dfsvis,precycle))
+               {
+                   return precycle[src]= true;
+                   
+               }
+                
+            }
+            else if(visited[x] && Dfsvis[x])
+            {
+                return precycle[src]= true;
+            }
+        }
+        
+        Dfsvis[src]=false;
+        return false;
+    }
+    vector<int> eventualSafeNodes(vector<vector<int>>& graph) {
+        vector<int>ans;
+        int n= graph.size();
+        vector<bool>visited(n,false);
+        vector<bool>Dfsvis(n,false);
+        
+        vector<bool>precycle(n,false);
+        
+        for(int i=0;i<n;i++)
+        {
+            if(!visited[i])
+            {
+                dfs(i,graph,visited,Dfsvis,precycle);
+            }
+        }
+        for( int i=0;i<n;i++)
+        {
+            if(!precycle[i])
+            {
+                ans.push_back(i);
+            }
+        }
+        return ans;
+    }
+};
