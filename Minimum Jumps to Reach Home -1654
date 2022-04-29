@@ -1,0 +1,33 @@
+class Solution {
+public:
+    int dp[6001][2];
+    unordered_map<int,int>mp;
+    
+    int f(int i, int back, int a, int b, int x)
+    {
+        if(i==x)return 0;
+        if(i<0 ||i>6000|| mp.find(i)!=mp.end()||back>=2)return 1e9;
+        
+        if(dp[i][back]!=-1)return dp[i][back];
+        
+        dp[i][back] = 1 +f(i+a,0,a,b,x);
+        
+        if(!back)
+        {
+            dp[i][back]=min(dp[i][back],1 + f(i-b,1,a,b,x));
+        }
+        return dp[i][back];
+    }
+    
+    int minimumJumps(vector<int>& forbidden, int a, int b, int x) {
+        for( int i=0;i<forbidden.size();i++)
+        {
+            mp[forbidden[i]]=1;
+        }
+        memset(dp,-1,sizeof(dp));
+        int ans = f(0,0,a,b,x);
+        return ans>1e9?-1:ans;
+        
+        
+    }
+};
